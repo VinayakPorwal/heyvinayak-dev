@@ -15,13 +15,16 @@ export const profile = {
   greeting: "Hi, I'm",
   role: "Freelance Full-Stack Web Developer",
   headline: "I build websites that turn visitors into clients.",
+  headlineAccent: "clients", // word set in the serif italic accent
+  available: true, // shows the "Available for new projects" badge
   subheadline:
     "Landing pages, business websites and custom web platforms for agencies, creators and growing businesses. Fast, mobile-first, and built to convert.",
   trustLine: "Trusted by agencies & creators · Delivered on time",
   about:
     "I'm Vinayak, a full-stack developer who helps agencies, creators and small businesses get online the right way. I handle everything from design to launch, so you get a fast, modern website without the technical headache. Under the hood, I work with Next.js, React and Node.js to build sites that are reliable and easy to grow.",
   location: "Indore, India", // TODO: confirm
-  photo: "", // TODO: add a square photo to /public (e.g. "/vinayak.jpg")
+  photo: "/vinayak.jpg",
+  timezone: "Asia/Kolkata",
   resumeLink: "https://drive.google.com/file/d/1KHR0_Yx1bMvALJtG3Mvil6D_AKzmUyM3/view?usp=sharing",
 };
 
@@ -31,7 +34,8 @@ export const contacts = {
   email: "work4vinayak@gmail.com",
   github: "https://github.com/vinayakporwal",
   linkedin: "https://www.linkedin.com/in/vinayakporwal/",
-  instagram: "https://www.instagram.com/vinayak_porwal/",
+  instagram: "https://www.instagram.com/really.vinayak/",
+  instagramHandle: "@really.vinayak",
 };
 
 export const budgets = ["Under $500", "$500 – $1,500", "$1,500 – $5,000", "$5,000+", "Not sure yet"];
@@ -50,7 +54,7 @@ export const services: { title: string; icon: ServiceIcon; benefit: string; incl
     image: "/work/learnycate.png" },
   { title: "Web Apps & Dashboards", icon: "layout-dashboard", benefit: "Custom tools that save your team time.",
     includes: ["CRMs & admin panels", "Email automation", "API integrations", "Scalable backend"],
-    image: "/photos/arch-893-800x1000.jpg" }, // TODO: swap for a dashboard screenshot
+    image: "" }, // TODO: add a dashboard screenshot
 ];
 
 export type WorkItem = {
@@ -111,37 +115,44 @@ export const work: WorkItem[] = [
 
 export const experience = [
   {
-    company: "Pet Matrix Clinic Pvt. Ltd.", role: "Full Stack Developer",
-    duration: "Mar 2024 – May 2024", location: "Indore, India",
-    summary: "Built the clinic's website with online appointment booking and an admin panel for managing doctors and clients.",
-    impact: "Helped the clinic grow its customer base by 20%.",
-    tech: ["Next.js", "React", "SCSS", "MongoDB", "Nodemailer", "CRON jobs", "Magic-link auth", "File uploads"],
+    company: "Webmark Pvt. Ltd.", role: "Full Stack Developer", // TODO: confirm role title
+    link: "https://webmarkhq.com",
+    duration: "Sep 2024 – Present", location: "India", // TODO: confirm location / remote
+    summary: "Building websites and web products for Webmark's clients, from first design to launch.", // TODO: refine
+    impact: "TODO: add a real outcome (shipped projects, speed gains, client results)",
+    tech: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Node.js"], // TODO: confirm stack
+  },
+  {
+    company: "Freelance", role: "Full-Stack Web Developer",
+    link: "",
+    duration: "Dec 2023 – Aug 2024", location: "Remote",
+    summary: "Designed and built landing pages, business websites and a course platform for agencies and creators.",
+    impact: "Shipped live sites for ContentFinix, a video agency and Learnycate.", // TODO: confirm these fall in this period
+    tech: ["Next.js", "React", "Tailwind CSS", "Framer Motion", "Node.js", "MongoDB"],
   },
   {
     company: "Vivafox Digital Pvt. Ltd.", role: "Frontend Developer",
+    link: "",
     duration: "Aug 2023 – Nov 2023", location: "Gurgaon, India (Remote)",
     summary: "Built a cloud CRM that lets businesses manage clients and run email marketing campaigns.",
     impact: "Delivered server-rendered, fast-loading app screens and email funnel builder.",
     tech: ["React", "Next.js", "Tailwind CSS", "Redux Toolkit", "REST APIs", "Agile"],
   },
   {
-    company: "Helper Hand", role: "Frontend Developer",
-    duration: "Apr 2023", location: "Remote",
-    summary: "Built the interface for an app connecting people with disabilities to helpers, including a custom booking calendar.",
-    impact: "Improved form usability and validation by 50%.",
-    tech: ["React", "Tailwind CSS", "React Hook Form", "Material UI"],
+    company: "Freelance", role: "Web Developer",
+    link: "",
+    duration: "Jan 2023 – Jul 2023", location: "Remote", // TODO: confirm start date
+    summary: "Built websites and small web apps for early clients while sharpening my full-stack skills.",
+    impact: "TODO: add a real outcome",
+    tech: ["React", "Node.js", "Express", "Firebase"],
   },
 ];
 
 export const process = [
-  { title: "Discovery call", text: "We talk about your business, your customers and what the site needs to do. You get a clear plan and a fixed quote.",
-    image: "/photos/arch-942-800x1000.jpg", alt: "A white angular building against a black sky" },
-  { title: "Design & plan", text: "I design the pages and map out every section before writing code, so you see exactly what you are getting.",
-    image: "/photos/arch-893-800x1000.jpg", alt: "A curved latticed facade forming sweeping lines" },
-  { title: "Build with regular updates", text: "I build the site and share progress every few days. You can click through it and give feedback as it grows.",
-    image: "/photos/arch-1033-800x1000.jpg", alt: "Twin escalators rising through a dark concourse" },
-  { title: "Launch & support", text: "Your site goes live on your domain. I stay around after launch to fix issues and help with changes.",
-    image: "/photos/arch-692-800x1000.jpg", alt: "A busy station hall with people crossing under tall windows" },
+  { title: "Discovery call", text: "We talk about your business, your customers and what the site needs to do. You get a clear plan and a fixed quote." },
+  { title: "Design & plan", text: "I design the pages and map out every section before writing code, so you see exactly what you are getting." },
+  { title: "Build with regular updates", text: "I build the site and share progress every few days. You can click through it and give feedback as it grows." },
+  { title: "Launch & support", text: "Your site goes live on your domain. I stay around after launch to fix issues and help with changes." },
 ];
 
 // Hidden for now (sections.projects = false)
@@ -185,6 +196,3 @@ export const skills = {
 export type Testimonial = { quote: string; name: string; role: string };
 
 export const testimonials: Testimonial[] = []; // TODO: ask Rashid & Karan for a 1–2 line quote each
-
-// Credits for the atmosphere photographs (Unsplash licence, via picsum.photos)
-export const photoCredits = ["Carl Nenzen Loven", "Samuel Zeller", "Erez Attias", "Nicolai Berntsen"];

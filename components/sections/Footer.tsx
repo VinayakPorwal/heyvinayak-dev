@@ -1,77 +1,81 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
-import { useRef, useSyncExternalStore } from "react";
-import { contacts, photoCredits, profile } from "@/data";
+import { useSyncExternalStore } from "react";
+import { contacts, profile } from "@/data";
 import { navLinks, socials } from "@/lib/links";
 
-const noop = () => () => {};
+// Ticks every 30s; the server renders nothing so the page stays prerendered.
+const subscribe = (cb: () => void) => {
+  const t = setInterval(cb, 30_000);
+  return () => clearInterval(t);
+};
+const timeFmt = new Intl.DateTimeFormat("en-IN", {
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: true,
+  timeZone: profile.timezone,
+});
+const getTime = () => timeFmt.format(new Date());
 
 export function Footer() {
-  const ref = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
-  const scale = useTransform(scrollYProgress, [0, 1], [0.94, 1]);
-  const photoScale = useTransform(scrollYProgress, [0, 1], [1.08, 1]);
-  // Year is read on the client only, so the page can stay fully prerendered.
-  const year = useSyncExternalStore(noop, () => new Date().getFullYear(), () => null);
+  const time = useSyncExternalStore(subscribe, getTime, () => null);
+  const year = useSyncExternalStore(subscribe, () => new Date().getFullYear(), () => null);
 
   return (
-    <footer ref={ref} className="relative isolate flex min-h-[88svh] flex-col overflow-hidden text-[#f2f2f2] md:min-h-[100svh]">
-      <motion.div style={{ scale: reduce ? 1 : photoScale }} className="absolute inset-0 -z-10">
-        <Image
-          src="/photos/arch-1033-2400x1350.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover brightness-[0.55]"
-        />
-      </motion.div>
-
-      <div className="frame flex flex-wrap justify-between gap-10 pt-10 text-body md:pt-14">
-        <nav aria-label="Footer">
-          <ul className="space-y-1">
-            {navLinks.map((l) => (
-              <li key={l.href}>
-                <a href={l.href} className="hover:underline hover:underline-offset-4">
-                  {l.label}
+    <footer className="relative overflow-hidden border-t border-border pt-16">
+      <div className="container-x">
+        <div className="flex flex-wrap justify-between gap-10">
+          <div>
+            <p className="text-lg font-semibold tracking-tight">{profile.name}</p>
+            <p className="mt-1 text-sm text-muted">{profile.role}</p>
+            <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 font-mono text-xs text-muted">
+              <span aria-hidden className="size-1.5 animate-pulse-dot rounded-full bg-green-500" />
+              {time ? `${time} IST` : "IST"} · {profile.location}
+            </p>
+          </div>
+          <nav aria-label="Footer" className="flex gap-16 text-sm">
+            <ul className="space-y-2">
+              {navLinks.map((l) => (
+                <li key={l.href}>
+                  <a href={l.href} className="text-muted transition-colors hover:text-ink">
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <ul className="space-y-2">
+              <li>
+                <a href={`mailto:${contacts.email}`} className="text-muted transition-colors hover:text-ink">
+                  Email
                 </a>
               </li>
-            ))}
-          </ul>
-        </nav>
-        <div className="space-y-1 md:text-right">
-          <p>
-            <a href={`mailto:${contacts.email}`} className="hover:underline hover:underline-offset-4">
-              {contacts.email}
-            </a>
-          </p>
-          {socials.map((s) => (
-            <p key={s.label}>
-              <a href={s.href} target="_blank" rel="noopener noreferrer" className="hover:underline hover:underline-offset-4">
-                {s.label}
-              </a>
-            </p>
-          ))}
+              {socials.map((s) => (
+                <li key={s.label}>
+                  <a href={s.href} target="_blank" rel="noopener noreferrer" className="text-muted transition-colors hover:text-ink">
+                    {s.label} ↗
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
-      </div>
 
-      <div className="frame mt-auto pb-8">
-        <motion.p
-          aria-hidden
-          style={{ scale: reduce ? 1 : scale }}
-          className="display origin-bottom-left whitespace-nowrap text-mark leading-[0.82] tracking-[-0.05em]"
-        >
-          vinayak porwal
-        </motion.p>
-        <p className="mt-6 flex flex-wrap justify-between gap-x-6 gap-y-1 text-small text-[#d4d4d4]">
+        <p className="mt-14 flex flex-wrap justify-between gap-2 text-xs text-muted">
           <span>
-            © {year ? `${year} ` : ""}{profile.name} · Built with Next.js
+            © {year ? `${year} ` : ""}
+            {profile.name}
           </span>
-          <span>Photos: {photoCredits.join(", ")} (Unsplash)</span>
+          <span>Built with Next.js</span>
         </p>
       </div>
+
+      <p
+        aria-hidden
+        className="headline pointer-events-none mt-6 select-none whitespace-nowrap text-center text-[12.5vw] leading-[0.8] text-transparent [-webkit-text-stroke:1px_var(--border-strong)]"
+        style={{ backgroundImage: "linear-gradient(to bottom, var(--surface-2), transparent 85%)", WebkitBackgroundClip: "text", backgroundClip: "text" }}
+      >
+        vinayak porwal
+      </p>
     </footer>
   );
 }

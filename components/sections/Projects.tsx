@@ -1,45 +1,51 @@
 import Image from "next/image";
 import { projects } from "@/data";
 import { isTodo } from "@/lib/links";
-import { ButtonLink } from "@/components/ui/Button";
+import { BrowserFrame } from "@/components/ui/BrowserFrame";
+import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Section } from "@/components/ui/Section";
 import { UnderTheHood } from "@/components/ui/UnderTheHood";
 
 export function Projects() {
   return (
-    <section id="projects" aria-labelledby="projects-title" className="frame py-28 md:py-44">
-      <SectionHeading
-        id="projects-title"
-        title="Side projects"
-        intro="Things I built on my own time to learn and to try ideas."
-      />
-      <ul className="mt-16 grid gap-x-8 gap-y-20 md:mt-24 md:grid-cols-2">
+    <Section id="projects" kicker="Side projects" title="Things I built for fun" intro="Experiments and tools I made on my own time.">
+      <ul className="grid gap-4 md:grid-cols-2">
         {projects.map((p, i) => {
-          const links = [
-            ...(p.code && !isTodo(p.code) ? [{ label: "Source code", href: p.code }] : []),
-          ];
+          const links = p.code && !isTodo(p.code) ? [{ label: "Source code", href: p.code }] : [];
           return (
-            <Reveal as="li" order={i % 2} key={p.slug} className={i % 2 ? "md:mt-24" : ""}>
-              {p.image && (
-                <div className="relative aspect-[16/10] overflow-hidden bg-surface">
-                  <Image src={p.image} alt={`Screenshot of ${p.title}`} fill sizes="(min-width: 768px) 45vw, 100vw" className="lit object-cover object-top" />
+            <Reveal as="li" key={p.slug} order={i % 2}>
+              <article className="group flex h-full flex-col rounded-2xl border border-border bg-surface p-4">
+                {p.image && (
+                  <BrowserFrame url={p.link || p.code}>
+                    <div className="relative aspect-[16/10]">
+                      <Image
+                        src={p.image}
+                        alt={`Screenshot of ${p.title}`}
+                        fill
+                        sizes="(min-width: 768px) 520px, 100vw"
+                        className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]"
+                      />
+                    </div>
+                  </BrowserFrame>
+                )}
+                <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
+                  <h3 className="text-lg font-semibold tracking-tight">{p.title}</h3>
+                  <p className="mt-2 flex-1 text-[0.9375rem] text-muted">{p.description}</p>
+                  <div className="mt-5 flex flex-wrap items-center gap-4">
+                    {p.link && (
+                      <Button href={p.link} external variant="ghost" className="h-10">
+                        Try it live
+                      </Button>
+                    )}
+                    <UnderTheHood tech={p.tech} links={links} />
+                  </div>
                 </div>
-              )}
-              <h3 className="mt-6 text-lead font-medium tracking-tight">{p.title}</h3>
-              <p className="mt-2 max-w-[52ch] text-muted">{p.description}</p>
-              {p.link && (
-                <div className="mt-6">
-                  <ButtonLink href={p.link} external variant="secondary">
-                    Try it live
-                  </ButtonLink>
-                </div>
-              )}
-              <UnderTheHood tech={p.tech} links={links} />
+              </article>
             </Reveal>
           );
         })}
       </ul>
-    </section>
+    </Section>
   );
 }

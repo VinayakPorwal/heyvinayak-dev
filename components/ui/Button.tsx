@@ -1,34 +1,71 @@
-import { ArrowUpRight } from "lucide-react";
+"use client";
 
-type ButtonLinkProps = {
+import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import { useRef } from "react";
+
+type ButtonProps = {
   href: string;
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "text";
+  variant?: "primary" | "ghost" | "link";
   external?: boolean;
+  magnetic?: boolean;
   className?: string;
+  icon?: React.ReactNode;
 };
 
 const styles = {
-  primary: "bg-accent text-accent-ink hover:brightness-110 px-6 h-12",
-  secondary: "bg-surface-2 text-ink hover:bg-ink hover:text-bg px-6 h-12",
-  text: "text-ink underline decoration-muted underline-offset-4 hover:decoration-accent",
+  primary:
+    "h-12 rounded-full bg-accent px-6 font-medium text-accent-ink hover:brightness-105",
+  ghost:
+    "h-12 rounded-full border border-border-strong px-6 font-medium text-ink hover:border-ink/40 hover:bg-surface-2",
+  link: "font-medium text-accent-text underline-offset-4 hover:underline",
 };
 
-export function ButtonLink({ href, children, variant = "primary", external, className = "" }: ButtonLinkProps) {
+export function Button({
+  href,
+  children,
+  variant = "primary",
+  external,
+  magnetic = variant === "primary",
+  className = "",
+  icon,
+}: ButtonProps) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const reduce = useReducedMotion();
+  const x = useSpring(useMotionValue(0), { stiffness: 250, damping: 18, mass: 0.4 });
+  const y = useSpring(useMotionValue(0), { stiffness: 250, damping: 18, mass: 0.4 });
+
+  const onMove = (e: React.PointerEvent) => {
+    if (!magnetic || reduce || e.pointerType !== "mouse" || !ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    x.set((e.clientX - (r.left + r.width / 2)) * 0.25);
+    y.set((e.clientY - (r.top + r.height / 2)) * 0.35);
+  };
+  const reset = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   return (
-    <a
+    <motion.a
+      ref={ref}
       href={href}
+      style={{ x, y }}
+      onPointerMove={onMove}
+      onPointerLeave={reset}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className={`group inline-flex items-center gap-2 text-small font-medium transition-[background-color,color,filter,transform] duration-200 active:scale-[0.98] ${styles[variant]} ${className}`}
+      className={`group inline-flex items-center justify-center gap-2 text-[0.9375rem] transition-[background-color,border-color,filter,color] duration-200 active:scale-[0.98] ${styles[variant]} ${className}`}
     >
       {children}
-      {external && (
-        <ArrowUpRight
-          aria-hidden
-          className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-        />
-      )}
+      {icon ??
+        (external && (
+          <ArrowUpRight
+            aria-hidden
+            className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+          />
+        ))}
       {external && <span className="sr-only">(opens in a new tab)</span>}
-    </a>
+    </motion.a>
   );
 }

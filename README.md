@@ -35,12 +35,11 @@ Everything the site says comes from **`data.ts`** in the project root. You never
 | `testimonials` | Client quotes. The section stays hidden while this array is empty. |
 
 ### TODOs
-Search `data.ts` for `TODO`. Any `result` on a work item that starts with `TODO` is **hidden on the site automatically**, so no placeholder text ever shows. Replace them with real outcomes when you have them.
+Search `data.ts` for `TODO`. Any work `result` or experience `impact` that starts with `TODO` is **hidden on the site automatically**, so no placeholder text ever shows. Replace them with real outcomes when you have them.
 
 ### Images
 - Client screenshots live in `public/work/` and are referenced from `work[].image`.
-- To add your photo, put a square image in `public/` (e.g. `public/vinayak.jpg`) and set `profile.photo = "/vinayak.jpg"`.
-- Atmosphere photos in `public/photos/` are from Unsplash (credited in the footer).
+- Your portrait is `public/vinayak.jpg` (square, hero) and `public/vinayak-wide.jpg` (About).
 
 ## Toggling sections
 
@@ -70,8 +69,9 @@ app/
   api/contact/route.ts  contact form endpoint
 components/
   sections/             Navbar, Hero, Services, Work, Experience, Process,
-                        TechStack, Projects, About, Testimonials, Contact, Footer
-  ui/                   UnderTheHood, Reveal, Button, ThemeToggle, SectionHeading, Providers
+                        ProofStrip, TechStack, Projects, About, Testimonials, Contact, Footer
+  ui/                   Section, CaseStudyCard, BentoCard, BrowserFrame, UnderTheHood,
+                        Marquee, Badge, Button, Spotlight, Reveal, ThemeToggle, Providers
 lib/links.ts            nav links, socials, Book-a-call link, TODO helper
 data.ts                 all content
 ```
@@ -80,9 +80,11 @@ data.ts                 all content
 
 ## Design notes
 
-- Dark by default with a light mode toggle. One accent colour (crimson), one typeface (Geist).
-- Every animation respects `prefers-reduced-motion`. Content stays visible even with JavaScript disabled.
-- Square corners, no gradients or shadows. Surfaces are told apart by small steps in tone.
+- Dark-first (`#0A0A0A`) with a light mode. One accent: electric lime `#C6F432`. Tokens live in `app/globals.css`.
+- Geist for UI, Geist Mono for technical details, Instrument Serif italic for one accent word per headline. The hero's word is set by `profile.headlineAccent` in `data.ts`.
+- Grain overlay, a soft radial glow behind the hero, rounded-2xl cards with 1px borders.
+- Motion uses Framer Motion and Lenis smooth scroll, and all of it turns off under `prefers-reduced-motion`.
+- Reusable UI lives in `components/ui/`: `Section`, `CaseStudyCard`, `BentoCard`, `BrowserFrame`, `UnderTheHood`, `Marquee`, `Badge`/`Pill`, `Button` (magnetic), `Spotlight`.
 
 ## Deploy
 

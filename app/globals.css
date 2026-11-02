@@ -2,28 +2,35 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Light: a pale room. Dark (default): the dark room. One accent: crimson. */
+/* Light mode */
 :root {
-  --bg: #f4f4f2;
-  --surface: #e9e9e6;
-  --surface-2: #deded9;
-  --ink: #0b0b0c;
-  --muted: #55555b;
-  --accent: #b11226;
-  --accent-ink: #ffffff;
-  --img-filter: none;
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --surface-2: #f2f2f0;
+  --border: rgb(10 10 10 / 0.08);
+  --border-strong: rgb(10 10 10 / 0.16);
+  --ink: #0a0a0a;
+  --muted: #5b5b61;
+  --accent: #c6f432; /* fills: buttons, dots, highlights */
+  --accent-ink: #0a0a0a; /* text on accent fills */
+  --accent-text: #3f6212; /* accent used as text on the page ground (AA on light) */
+  --glow: rgb(150 200 20 / 0.22);
   color-scheme: light;
 }
 
+/* Dark mode (default) */
 .dark {
-  --bg: #0b0b0c;
-  --surface: #141416;
-  --surface-2: #1c1c1f;
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface-2: #171717;
+  --border: rgb(255 255 255 / 0.08);
+  --border-strong: rgb(255 255 255 / 0.16);
   --ink: #ededed;
-  --muted: #a3a3a8;
-  --accent: #b11226;
-  --accent-ink: #ffffff;
-  --img-filter: brightness(0.86) contrast(1.05);
+  --muted: #a1a1a6;
+  --accent: #c6f432;
+  --accent-ink: #0a0a0a;
+  --accent-text: #c6f432;
+  --glow: rgb(198 244 50 / 0.14);
   color-scheme: dark;
 }
 
@@ -31,48 +38,72 @@
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
+  --color-accent-text: var(--accent-text);
   --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif);
 
-  /* Five sizes do all the work */
-  --text-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
-  --text-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
-  --text-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
-  --text-head: clamp(2.25rem, 1.4rem + 3.4vw, 4.25rem);
-  --text-mark: clamp(4rem, 1rem + 12vw, 13.5rem);
+  --text-hero: clamp(3rem, 1.8rem + 4.2vw, 5.5rem);
+  --text-h2: clamp(2.25rem, 1.5rem + 2.8vw, 3.75rem);
+  --text-h3: clamp(1.375rem, 1.2rem + 0.6vw, 1.75rem);
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-pulse-dot: pulse-dot 2s ease-out infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes pulse-dot {
+  0% {
+    box-shadow: 0 0 0 0 rgb(34 197 94 / 0.6);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 8px rgb(34 197 94 / 0);
+  }
 }
 
 html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scroll-padding-top: 6rem;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
 }
 
 body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
-  font-size: var(--text-body);
+  font-size: 1.0625rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Subtle grain over the whole room */
-body::before {
+/* Grain over everything */
+body::after {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 60;
-  opacity: 0.05;
+  z-index: 100;
+  opacity: 0.045;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -84,35 +115,62 @@ body::before {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
+  border-radius: 6px;
 }
 
-.lit {
-  filter: var(--img-filter);
-}
-
-.display {
-  letter-spacing: -0.035em;
-  line-height: 1;
-  font-weight: 500;
-}
-
-/* Page frame: one pair of margins everywhere */
-.frame {
+.container-x {
   width: 100%;
+  max-width: calc(1100px + 3rem);
   margin-inline: auto;
-  max-width: 96rem;
-  padding-inline: 1.25rem;
+  padding-inline: 1.5rem;
 }
 
-@media (min-width: 768px) {
-  .frame {
-    padding-inline: 2rem;
+.headline {
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.serif-accent {
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Spotlight that follows the cursor (set --x/--y from JS) */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background: radial-gradient(400px circle at var(--x, 50%) var(--y, 50%), var(--glow), transparent 60%);
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+.hero-glow {
+  background: radial-gradient(60% 50% at 50% 0%, var(--glow), transparent 70%);
+}
+
+.mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-}
-
-.no-scrollbar {
-  scrollbar-width: none;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
 }

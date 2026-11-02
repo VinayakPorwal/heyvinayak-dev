@@ -6,6 +6,7 @@ import { Footer } from "@/components/sections/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { Navbar } from "@/components/sections/Navbar";
 import { Process } from "@/components/sections/Process";
+import { ProofStrip } from "@/components/sections/ProofStrip";
 import { Projects } from "@/components/sections/Projects";
 import { Services } from "@/components/sections/Services";
 import { TechStack } from "@/components/sections/TechStack";
@@ -18,6 +19,7 @@ export default function Home() {
       <Navbar />
       <main id="main">
         <Hero />
+        <ProofStrip />
         <Services />
         {sections.work && <Work />}
         {sections.experience && <Experience />}

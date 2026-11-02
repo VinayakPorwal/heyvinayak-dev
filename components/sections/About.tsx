@@ -1,76 +1,64 @@
+import { MapPin, Clock, Globe } from "lucide-react";
 import Image from "next/image";
 import { contacts, profile } from "@/data";
-import { ButtonLink } from "@/components/ui/Button";
+import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
+import { Section } from "@/components/ui/Section";
 
 export function About() {
   const facts = [
-    { label: "Based in", value: profile.location },
-    { label: "Works with", value: "Clients worldwide, remotely" },
-    { label: "Reply time", value: "Within 24 hours" },
+    { Icon: MapPin, label: profile.location },
+    { Icon: Globe, label: "Works with clients worldwide" },
+    { Icon: Clock, label: "Replies within 24 hours" },
   ];
-  const [first, ...rest] = profile.about.split(". ");
-  const restText = rest.join(". ");
 
   return (
-    <section id="about" aria-labelledby="about-title" className="frame py-28 md:py-44">
-      <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
-        <div className="lg:col-span-3">
-          <Reveal>
-            <h2 id="about-title" className="text-lead font-medium tracking-tight">
-              About me
-            </h2>
-          </Reveal>
-          <Reveal order={1}>
-            <dl className="mt-8 hidden space-y-5 text-small lg:block">
-              {facts.map((f) => (
-                <div key={f.label}>
-                  <dt className="text-muted">{f.label}</dt>
-                  <dd>{f.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </Reveal>
-        </div>
+    <Section
+      id="about"
+      kicker="About"
+      title={
+        <>
+          The person <span className="serif-accent">behind</span> the code
+        </>
+      }
+    >
+      <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
+        <Reveal className="lg:col-span-6">
+          <div className="group relative aspect-[16/11] overflow-hidden rounded-3xl border border-border bg-surface">
+            <Image
+              src="/vinayak-wide.jpg"
+              alt={`${profile.name} sitting at a desk, arms crossed`}
+              fill
+              sizes="(min-width: 1024px) 540px, 100vw"
+              className="object-cover object-[60%_40%] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+            />
+          </div>
+        </Reveal>
 
-        <div className="lg:col-span-9">
+        <div className="lg:col-span-6">
           <Reveal order={1}>
-            <p className="text-[clamp(1.375rem,0.9rem+1.5vw,2.25rem)] leading-[1.25] tracking-tight">
-              <span className="float-left mr-[0.5em] mt-[0.2em] block size-[2.5em] overflow-hidden bg-surface-2">
-                {profile.photo ? (
-                  <Image src={profile.photo} alt={`Portrait of ${profile.name}`} width={240} height={240} className="size-full object-cover" />
-                ) : (
-                  // TODO: replace with a real photo (set profile.photo in data.ts)
-                  <span className="grid size-full place-items-center text-[0.9em] font-medium text-muted" role="img" aria-label={`Photo of ${profile.name} coming soon`}>
-                    VP
-                  </span>
-                )}
-              </span>
-              {first}.
-            </p>
-            <p className="clear-both pt-8 max-w-[60ch] text-lead leading-snug text-muted">{restText}</p>
+            <p className="text-xl leading-relaxed tracking-tight text-ink md:text-2xl md:leading-snug">{profile.about}</p>
           </Reveal>
-
           <Reveal order={2}>
-            <dl className="mt-10 grid grid-cols-3 gap-4 text-small lg:hidden">
-              {facts.map((f) => (
-                <div key={f.label}>
-                  <dt className="text-muted">{f.label}</dt>
-                  <dd>{f.value}</dd>
-                </div>
+            <ul className="mt-8 flex flex-wrap gap-2">
+              {facts.map(({ Icon, label }) => (
+                <li key={label} className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3.5 py-1.5 text-sm text-muted">
+                  <Icon aria-hidden className="size-3.5 text-accent-text" />
+                  {label}
+                </li>
               ))}
-            </dl>
-            <div className="mt-12 flex flex-wrap gap-3">
-              <ButtonLink href={profile.resumeLink} external variant="secondary">
-                View my resume
-              </ButtonLink>
-              <ButtonLink href={`mailto:${contacts.email}`} variant="text" className="h-12 px-2">
-                {contacts.email}
-              </ButtonLink>
-            </div>
+            </ul>
+          </Reveal>
+          <Reveal order={3} className="mt-10 flex flex-wrap items-center gap-3">
+            <Button href={profile.resumeLink} external variant="ghost">
+              View my resume
+            </Button>
+            <Button href={contacts.instagram} external variant="link" className="px-2">
+              {contacts.instagramHandle}
+            </Button>
           </Reveal>
         </div>
       </div>
-    </section>
+    </Section>
   );
 }

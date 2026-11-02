@@ -1,40 +1,55 @@
-import Image from "next/image";
+"use client";
+
+import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
+import { useRef } from "react";
 import { process } from "@/data";
 import { Reveal } from "@/components/ui/Reveal";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-
-// Varying space above each picture so the row rises and falls.
-const gaps = ["md:mt-10", "md:mt-28", "md:mt-16", "md:mt-36"];
+import { Section } from "@/components/ui/Section";
 
 export function Process() {
-  return (
-    <section id="process" aria-labelledby="process-title" className="py-28 md:py-44">
-      <div className="frame">
-        <SectionHeading
-          id="process-title"
-          title="How we'll work together"
-          intro="Four simple steps from first call to a live site. You always know what's happening and what comes next."
-        />
-      </div>
+  const ref = useRef<HTMLOListElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 80%", "end 55%"] });
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+  const fill = reduce ? 1 : progress;
 
-      <ol className="frame mt-16 grid gap-12 md:mt-24 md:grid-cols-4 md:gap-8">
+  return (
+    <Section
+      id="process"
+      kicker="Process"
+      title={
+        <>
+          How we&apos;ll work <span className="serif-accent">together</span>
+        </>
+      }
+      intro="Four simple steps from first call to a live site. You always know what's happening and what comes next."
+    >
+      <ol ref={ref} className="relative grid gap-10 md:grid-cols-4 md:gap-6">
+        {/* Connecting line: vertical on mobile, horizontal on desktop */}
+        <span aria-hidden className="absolute left-5 top-5 h-[calc(100%-2.5rem)] w-px bg-border md:right-5 md:h-px md:w-auto" />
+        <motion.span
+          aria-hidden
+          style={{ scaleY: fill }}
+          className="absolute left-5 top-5 h-[calc(100%-2.5rem)] w-px origin-top bg-accent md:hidden"
+        />
+        <motion.span
+          aria-hidden
+          style={{ scaleX: fill }}
+          className="absolute left-5 right-5 top-5 hidden h-px origin-left bg-accent md:block"
+        />
+
         {process.map((step, i) => (
-          <Reveal
-            as="li"
-            order={i}
-            key={step.title}
-            className="grid grid-cols-[1fr_38%] gap-5 md:flex md:flex-col md:gap-0"
-          >
+          <Reveal as="li" key={step.title} order={i} className="relative flex gap-5 md:flex-col md:gap-6">
+            <span className="relative z-10 grid size-10 shrink-0 place-items-center rounded-full border border-border-strong bg-bg font-mono text-sm text-accent-text">
+              {String(i + 1).padStart(2, "0")}
+            </span>
             <div>
-              <h3 className="text-lead font-medium tracking-tight">{step.title}</h3>
-              <p className="mt-3 text-small text-muted md:text-body">{step.text}</p>
-            </div>
-            <div className={`relative aspect-[4/5] overflow-hidden bg-surface ${gaps[i % gaps.length]}`}>
-              <Image src={step.image} alt={step.alt} fill sizes="(min-width: 768px) 24vw, 38vw" className="lit object-cover" />
+              <h3 className="text-lg font-semibold tracking-tight">{step.title}</h3>
+              <p className="mt-2 text-[0.9375rem] text-muted">{step.text}</p>
             </div>
           </Reveal>
         ))}
       </ol>
-    </section>
+    </Section>
   );
 }
