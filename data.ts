@@ -51,7 +51,7 @@ export const services: { title: string; icon: ServiceIcon; benefit: string; incl
     image: "/work/video-agency.png" },
   { title: "Course & Creator Platforms", icon: "graduation-cap", benefit: "Sell your courses under your own brand.",
     includes: ["Course pages", "Video lessons", "User accounts", "Payments-ready"],
-    image: "/work/learnycate.png" },
+    image: "/work/learnycate-signup.png" },
   { title: "Web Apps & Dashboards", icon: "layout-dashboard", benefit: "Custom tools that save your team time.",
     includes: ["CRMs & admin panels", "Email automation", "API integrations", "Scalable backend"],
     image: "" }, // TODO: add a dashboard screenshot
@@ -73,6 +73,19 @@ export type WorkItem = {
 
 export const work: WorkItem[] = [
   {
+    slug: "petmatrix",
+    client: "Pet Matrix Clinic, veterinary clinic in Indore",
+    type: "Clinic Website + Admin CMS",
+    title: "Pet Matrix",
+    link: "https://petmatrixclinic.com/",
+    problem: "The clinic needed a professional website where pet owners could book appointments online, and an easy way for staff to manage clients and send reminders.",
+    solution: "Built a landing site with online appointment booking, plus an admin CMS for the team to manage doctors, clients and content, with automated scheduled emails for reminders and follow-ups.",
+    result: "Helped the clinic grow its customer base by 20%.",
+    tech: ["Next.js", "React", "SCSS", "MongoDB", "Nodemailer", "CRON jobs", "Magic-link auth", "File uploads"],
+    highlights: ["Admin CMS for doctors, clients and content", "Scheduled email automation with CRON + Nodemailer", "Passwordless magic-link login for staff"],
+    image: "/work/petmatrix.png",
+  },
+  {
     slug: "contentfinix",
     client: "Rashid, Social Media Agency (ContentFinix)",
     type: "Agency Landing Page",
@@ -88,15 +101,15 @@ export const work: WorkItem[] = [
   {
     slug: "learnycate",
     client: "Course platform for influencers", // TODO: confirm client/attribution
-    type: "Course Selling Platform",
+    type: "Course Platform MVP",
     title: "Learnycate",
     link: "https://learnycate.vercel.app/",
     problem: "Influencers and creators needed a way to sell courses under their own brand instead of relying on third-party marketplaces.",
-    solution: "Built a Coursera-style course platform with a familiar, YouTube-like viewing experience, so students feel at home from the first click.",
+    solution: "Built an MVP of a course platform with sign-up, roles for creators and students, and a familiar YouTube-style viewing experience, so the idea could be tested with real users before investing in a full product.",
     result: "TODO: add real result",
     tech: ["Next.js", "React", "Node.js", "MongoDB"], // TODO: confirm stack
-    highlights: ["Course catalog & video lessons", "YouTube-style player UI", "User accounts"],
-    image: "/work/learnycate.png", // TODO: replace with a screenshot that shows courses (public page is empty when logged out)
+    highlights: ["MVP scope: auth, roles, course catalog", "YouTube-style player UI", "Built to validate the idea fast"],
+    image: "/work/learnycate-signup.png", // sign-up screen
   },
   {
     slug: "video-agency",
@@ -125,10 +138,10 @@ export const experience = [
   {
     company: "Freelance", role: "Full-Stack Web Developer",
     link: "",
-    duration: "Dec 2023 – Aug 2024", location: "Remote",
-    summary: "Designed and built landing pages, business websites and a course platform for agencies and creators.",
-    impact: "Shipped live sites for ContentFinix, a video agency and Learnycate.", // TODO: confirm these fall in this period
-    tech: ["Next.js", "React", "Tailwind CSS", "Framer Motion", "Node.js", "MongoDB"],
+    duration: "2023 – Aug 2024", location: "Remote", // TODO: add the start month
+    summary: "Started with my first client, Pet Matrix, a vet clinic website with an admin CMS and scheduled emails. Then landing pages, business sites and a course platform MVP for agencies and creators.",
+    impact: "Shipped live sites for Pet Matrix, ContentFinix, a video agency and Learnycate.",
+    tech: ["Next.js", "React", "Tailwind CSS", "Framer Motion", "Node.js", "MongoDB", "Nodemailer", "CRON jobs"],
   },
   {
     company: "Vivafox Digital Pvt. Ltd.", role: "Frontend Developer",
@@ -137,14 +150,6 @@ export const experience = [
     summary: "Built a cloud CRM that lets businesses manage clients and run email marketing campaigns.",
     impact: "Delivered server-rendered, fast-loading app screens and email funnel builder.",
     tech: ["React", "Next.js", "Tailwind CSS", "Redux Toolkit", "REST APIs", "Agile"],
-  },
-  {
-    company: "Freelance", role: "Web Developer",
-    link: "",
-    duration: "Jan 2023 – Jul 2023", location: "Remote", // TODO: confirm start date
-    summary: "Built websites and small web apps for early clients while sharpening my full-stack skills.",
-    impact: "TODO: add a real outcome",
-    tech: ["React", "Node.js", "Express", "Firebase"],
   },
 ];
 
